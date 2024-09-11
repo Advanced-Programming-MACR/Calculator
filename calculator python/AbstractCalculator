@@ -1,0 +1,97 @@
+from abc import ABC, abstractmethod
+from datetime import datetime
+import numpy as np
+
+class AbstractCalculator(ABC):
+    """This an abstract class of a calculator"""
+
+
+    def sum(self, a: int,b: int) -> int:
+        """
+        This method sum two integer numbers
+
+        Just summing both numbers
+
+        Args:
+            a(int): One of the numbers
+            b(int): The other number that will be sum
+            
+        Returns:
+            An integer number with the result of the sum
+        """
+        return a+b
+    
+    @abstractmethod
+    def division(self,a:float,b:float) -> float:
+        """This is an abstract method to force the implemnt of division
+
+        This is just an abstract of waht it should be.
+
+        Args:
+            a(float): Numerator of the division
+            b(float): Dividor of the division
+        
+        Returns: 
+            A number with the result of the division
+        """
+        return float
+
+#=================================== Concrete Calculator ================================ #
+
+class Calculator(AbstractCalculator):
+    """This is a simple concrete calculator."""
+
+    def __init__(self):
+        self.memory=0
+
+
+    def division(self, a: float, b:float):
+        """This is a concrete version of a division
+
+        This method implements a simple division between two numbers but a validation to avoid
+        zero-division is applied.
+
+        Args:
+            a(float): Numerator of the division
+            b(float): Divisor of the division
+
+        Returns:
+            A flota with the result of the division, or an error.
+
+        Raise:
+            An error will arise when denomitor will be zero.
+        """
+        try:
+            result= a/b
+            return result
+        except Exception as e:
+            print(f"ERROR, {e}")
+            with open('log.txt','a',encoding='utf-8') as file:
+                file.write(f"{datetime.now()}. Division by zero.") 
+            result= np.nan
+        return result  
+
+
+#=================================== Client CLI ================================ #
+if name == "__main__":
+    MENU = """1. do sum
+    2. Do division
+    3. exit.\n"""
+
+    #Create an instance of a calculator
+    calculator = Calculator()
+
+    option = input(MENU)
+    while option != 3:
+        if option == 1:
+            a=input("Provide first number of the sum: ")
+            b=input("Provide second number of the sum: ")
+            print(f"Result: {calculator.sum(a,b)}")
+        elif option == 2:
+            a=input("Provide the numerator: ")
+            b=input("Provide the divisor: ")
+            print(f"Result: {calculator.division(a,b)}")
+        else:
+            print("Please, choose a valid option.\n")
+
+        option=input(MENU) # Avoid infinite loop
